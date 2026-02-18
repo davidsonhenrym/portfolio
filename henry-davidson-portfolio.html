@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Henry Davidson, MSDA — Player Personnel & Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFBE00;
+    --navy: #07090f;
+    --navy-mid: #0d1220;
+    --navy-card: #111827;
+    --navy-border: #1e2a3a;
+    --white: #f0f2f5;
+    --muted: #6b7c93;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,190,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,190,0,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    background: rgba(7,9,15,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--navy-border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(160px, 22vw, 300px);
+    color: rgba(255,190,0,0.04);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .hero-content {
+    max-width: 900px;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 9vw, 128px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+  h1 .name-first { color: var(--white); display: block; }
+  h1 .name-last { color: var(--gold); display: block; }
+
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(15px, 2vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+
+  .avail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: rgba(255,190,0,0.08);
+    border: 1px solid rgba(255,190,0,0.2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-left: 14px;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+  }
+  .avail-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 52px;
+    flex-wrap: wrap;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .hero-cta { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  .btn {
+    padding: 14px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--gold); color: var(--navy); font-weight: 500; }
+  .btn-primary:hover { background: #ffd040; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,190,0,0.28); }
+  .btn-outline { background: transparent; color: var(--white); border: 1px solid var(--navy-border); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px; left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    animation: fadeIn 2s 1s both;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDrop 1.8s ease-in-out infinite;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    position: relative; z-index: 1;
+    overflow: hidden;
+    border-top: 1px solid var(--navy-border);
+    border-bottom: 1px solid var(--navy-border);
+    background: var(--navy-mid);
+    padding: 14px 0;
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    padding: 0 36px;
+  }
+  .marquee-item span { color: var(--gold); margin: 0 10px; }
+
+  /* SECTIONS */
+  section {
+    position: relative; z-index: 1;
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--navy-border);
+    max-width: 70px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1.1;
+    margin-bottom: 60px;
+    font-weight: 400;
+  }
+  h2 em { color: var(--gold); font-style: italic; }
+
+  /* EXPERIENCE */
+  .experience-grid { display: grid; gap: 2px; }
+
+  .exp-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s ease;
+  }
+  .exp-card:hover::before { transform: scaleY(1); }
+  .exp-card:hover { border-color: rgba(255,190,0,0.2); }
+
+  .exp-period { font-size: 11px; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+  .exp-org { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--gold); line-height: 1.2; }
+  .exp-location { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .exp-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.25;
+  }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .exp-bullets li { padding-left: 18px; position: relative; color: #8899aa; font-size: 13px; }
+  .exp-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 11px; top: 2px; }
+  .exp-highlight {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 14px;
+    background: rgba(255,190,0,0.07);
+    border: 1px solid rgba(255,190,0,0.2);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--gold);
+  }
+
+  /* SKILLS */
+  .skills-bg {
+    background: var(--navy-mid);
+    border-top: 1px solid var(--navy-border);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 100px 48px;
+    position: relative; z-index: 1;
+  }
+  .skills-inner { max-width: 1200px; margin: 0 auto; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .skill-block {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 30px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .skill-block:hover { border-color: rgba(255,190,0,0.3); transform: translateY(-4px); }
+  .skill-block-icon { font-size: 26px; margin-bottom: 14px; display: block; }
+  .skill-block-title { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .skill-tag {
+    padding: 4px 9px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--navy-border);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #8899aa;
+  }
+
+  /* ACHIEVEMENTS */
+  .achievements-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    margin-bottom: 0;
+  }
+  .achievement-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 36px 28px;
+    text-align: center;
+    transition: background 0.3s;
+  }
+  .achievement-card:hover { background: rgba(255,190,0,0.04); }
+  .achievement-num { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: var(--gold); line-height: 1; display: block; }
+  .achievement-desc { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+
+  /* EDUCATION */
+  .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .edu-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 34px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .edu-card:hover { border-color: rgba(255,190,0,0.25); }
+  .edu-degree-type { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .edu-degree { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--white); margin-bottom: 4px; font-weight: 400; }
+  .edu-school { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 2px; color: var(--muted); margin-bottom: 14px; }
+  .edu-gpa {
+    display: inline-block; padding: 3px 10px;
+    background: rgba(255,190,0,0.1);
+    border: 1px solid rgba(255,190,0,0.2);
+    font-size: 11px; color: var(--gold);
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .edu-notes { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .corner-accent {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border: 2px solid rgba(255,190,0,0.07);
+    transform: rotate(45deg);
+  }
+
+  /* CONTACT */
+  .contact-wrap { position: relative; z-index: 1; padding: 0 48px 100px; max-width: 1200px; margin: 0 auto; }
+  .contact-box {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-box::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,190,0,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .contact-box h2 { margin-bottom: 14px; }
+  .contact-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 44px;
+    max-width: 480px;
+    margin-left: auto; margin-right: auto;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .contact-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--muted);
+    font-size: 12px; letter-spacing: 1px;
+    transition: color 0.2s;
+    padding: 12px 22px;
+    border: 1px solid var(--navy-border);
+  }
+  .contact-link:hover { color: var(--gold); border-color: rgba(255,190,0,0.3); }
+
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--navy-border);
+    padding: 28px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--muted); font-size: 11px; letter-spacing: 1px;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    50.01% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero, section { padding-left: 24px; padding-right: 24px; }
+    .hero { padding-top: 100px; }
+    .exp-card { grid-template-columns: 1fr; gap: 20px; padding: 28px 24px; }
+    .contact-box { padding: 48px 24px; }
+    .contact-wrap { padding: 0 24px 80px; }
+    footer { padding: 24px; flex-direction: column; gap: 10px; text-align: center; }
+    .skills-bg { padding: 70px 24px; }
+    .hero-stats { gap: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">H·Davidson</a>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-text">GM</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Player Personnel · Data Analytics · Roster Architecture</div>
+    <h1>
+      <span class="name-first">Henry</span>
+      <span class="name-last">Davidson</span>
+    </h1>
+    <p class="hero-tagline">
+      Building championship-caliber rosters where advanced analytics meets football instinct.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">#1</span>
+        <div class="stat-label">MAC Transfer Class</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">46K+</span>
+        <div class="stat-label">Player-Seasons Analyzed</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">17</span>
+        <div class="stat-label">Sports Under Management</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4+</span>
+        <div class="stat-label">Years of Analytics</div>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get In Touch</a>
+      <a href="#experience" class="btn btn-outline">View My Work</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Transfer Portal Analysis <span>✦</span></span>
+    <span class="marquee-item">EWA Modeling <span>✦</span></span>
+    <span class="marquee-item">Roster Construction <span>✦</span></span>
+    <span class="marquee-item">Revenue Sharing Strategy <span>✦</span></span>
+    <span class="marquee-item">PFF Ultimate <span>✦</span></span>
+    <span class="marquee-item">SkillCorner <span>✦</span></span>
+    <span class="marquee-item">Scholarship Budget Management <span>✦</span></span>
+    <span class="marquee-item">Player Evaluation <span>✦</span></span>
+    <span class="marquee-item">Depth Chart Optimization <span>✦</span></span>
+    <span class="marquee-item">Transfer Portal Analysis <span>✦</span></span>
+    <span class="marquee-item">EWA Modeling <span>✦</span></span>
+    <span class="marquee-item">Roster Construction <span>✦</span></span>
+    <span class="marquee-item">Revenue Sharing Strategy <span>✦</span></span>
+    <span class="marquee-item">PFF Ultimate <span>✦</span></span>
+    <span class="marquee-item">SkillCorner <span>✦</span></span>
+    <span class="marquee-item">Scholarship Budget Management <span>✦</span></span>
+    <span class="marquee-item">Player Evaluation <span>✦</span></span>
+    <span class="marquee-item">Depth Chart Optimization <span>✦</span></span>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Professional History</div>
+  <h2>Where I've <em>Made an Impact</em></h2>
+  <div class="experience-grid">
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Oct 2025 — Present</div>
+        <div class="exp-org">University<br>of Toledo</div>
+        <div class="exp-location">Toledo, OH</div>
+      </div>
+      <div>
+        <div class="exp-title">Assistant Athletic Director, Student-Athlete Benefits & Data Analytics</div>
+        <ul class="exp-bullets">
+          <li>Directed development of a proprietary transfer portal evaluation system integrating PFF Ultimate, Telemetry, and SkillCorner into comprehensive player profiles with performance metrics and character assessments.</li>
+          <li>Recruited and acquired the <strong style="color:var(--white)">#1 Ranked Transfer Portal Class in the MAC</strong> (24/7 Sports) — a class of 30+ transfers.</li>
+          <li>Built an in-depth roster evaluation dashboard for rapid assessment of personnel performance and Revenue Sharing ROI across 17 sports.</li>
+          <li>Tracked and managed scholarship budgets across 17 sports in close collaboration with head coaches, recruiting staffers, and student-athletes.</li>
+          <li>Served as liaison between coaching staff and external personnel networks — agents, position coaches, and scouting staffers across Power 4 and G5 programs.</li>
+          <li>Collaborated with the General Manager on roster strategy, player personnel decisions, and resource allocation to align analytics with coaching priorities.</li>
+          <li>Managed and developed 3 student interns in data science and sports analytics.</li>
+        </ul>
+        <div class="exp-highlight">⚡ #1 MAC Transfer Portal Class — 24/7 Sports Rankings</div>
+      </div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Mar 2022 — Sep 2025</div>
+        <div class="exp-org">White<br>Lodging</div>
+        <div class="exp-location">Merrillville, IN</div>
+      </div>
+      <div>
+        <div class="exp-title">Corporate Manager, Commercial Optimization & Analysis</div>
+        <ul class="exp-bullets">
+          <li>Built audience segmentation models and interactive Tableau dashboards to drive targeted strategies — directly mirroring the player evaluation and depth chart frameworks now used in football ops.</li>
+          <li>Developed a new labor and food costing strategy generating <strong style="color:var(--white)">$1.2M in year-over-year savings</strong>.</li>
+          <li>Helped WL Restaurants reach a new high in full-year profit in 2024 while supporting a company-wide $2M food cost reduction initiative.</li>
+          <li>Worked directly with Regional VPs, Chief Revenue Officer, and Chief Commercial Officer on high-stakes, executive-level decisions.</li>
+          <li>Created Balanced Scorecard gap reports supporting 50+ restaurant and bar managers in achieving maximum short-term incentives.</li>
+        </ul>
+        <div class="exp-highlight">💰 $1.2M+ in Documented Cost Savings</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<div class="skills-bg" id="skills">
+  <div class="skills-inner">
+    <div class="section-label">Capabilities</div>
+    <h2>Technical <em>Toolkit</em></h2>
+    <div class="skills-grid">
+      <div class="skill-block reveal">
+        <span class="skill-block-icon">📊</span>
+        <div class="skill-block-title">Analytics & Programming</div>
+        <div class="skill-tags">
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Python (Pandas, NumPy)</span>
+          <span class="skill-tag">R / Tidyverse</span>
+          <span class="skill-tag">Statistical Modeling</span>
+          <span class="skill-tag">Predictive Modeling</span>
+          <span class="skill-tag">ETL / ELT Workflows</span>
+          <span class="skill-tag">GitHub</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <span class="skill-block-icon">🏈</span>
+        <div class="skill-block-title">Scouting & Evaluation</div>
+        <div class="skill-tags">
+          <span class="skill-tag">PFF Ultimate</span>
+          <span class="skill-tag">Telemetry</span>
+          <span class="skill-tag">SkillCorner</span>
+          <span class="skill-tag">Dropback Sports</span>
+          <span class="skill-tag">Film Breakdown</span>
+          <span class="skill-tag">Transfer Portal Analytics</span>
+          <span class="skill-tag">HS Recruiting Evaluation</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <span class="skill-block-icon">🖥️</span>
+        <div class="skill-block-title">Business Intelligence</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Tableau</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">Domo</span>
+          <span class="skill-tag">Interactive Dashboards</span>
+          <span class="skill-tag">Data Visualization</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <span class="skill-block-icon">🏟️</span>
+        <div class="skill-block-title">Football Operations</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Roster Management</span>
+          <span class="skill-tag">Transfer Portal Strategy</span>
+          <span class="skill-tag">EWA Modeling</span>
+          <span class="skill-tag">Depth Chart Optimization</span>
+          <span class="skill-tag">Scholarship Budgeting</span>
+          <span class="skill-tag">NIL / Revenue Sharing</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <span class="skill-block-icon">🤝</span>
+        <div class="skill-block-title">Leadership & Operations</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Cross-Functional Collaboration</span>
+          <span class="skill-tag">Stakeholder Communication</span>
+          <span class="skill-tag">Contract Negotiation</span>
+          <span class="skill-tag">Compliance Systems</span>
+          <span class="skill-tag">Coaching Staff Liaison</span>
+          <span class="skill-tag">Project Management</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="section-label">Quantified Results</div>
+  <h2>Impact <em>by the Numbers</em></h2>
+  <div class="achievements-strip">
+    <div class="achievement-card reveal">
+      <span class="achievement-num">#1</span>
+      <div class="achievement-desc">MAC Transfer Portal Class<br>(24/7 Sports)</div>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-num">46K+</span>
+      <div class="achievement-desc">Player-Seasons Analyzed<br>across FBS & FCS</div>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-num">30+</span>
+      <div class="achievement-desc">Transfer Acquisitions<br>in One Portal Cycle</div>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-num">$1.2M</span>
+      <div class="achievement-desc">Cost Savings Generated<br>via Analytics Strategy</div>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-num">17</span>
+      <div class="achievement-desc">Sports Programs<br>Under Management</div>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-num">3.9</span>
+      <div class="achievement-desc">GPA — Both<br>Graduate & Undergraduate</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" style="padding-top: 0;">
+  <div class="section-label">Academic Foundation</div>
+  <h2>Education & <em>Credentials</em></h2>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-degree-type">Master of Science</div>
+      <div class="edu-degree">Data Analytics, MSDA</div>
+      <div class="edu-school">University of Indianapolis</div>
+      <div class="edu-gpa">GPA: 3.9 / 4.0</div>
+      <div class="edu-notes">Certificates in Business Intelligence and Applied Data Science & Strategy. Designed an NCAA analytics dashboard using SQL, Python, and Tableau to analyze athlete performance metrics and support coaching strategy.</div>
+      <div class="corner-accent"></div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-degree-type">Bachelor of Science</div>
+      <div class="edu-degree">Quantitative Analysis & Marketing</div>
+      <div class="edu-school">Franklin College</div>
+      <div class="edu-gpa">GPA: 3.9 / 4.0</div>
+      <div class="edu-notes">Tom Bohlsen Academic All-Conference (4×). Thorp Wolford Prize for Excellence in Quantitative Analysis (5×). Four-year varsity track athlete and team captain. Mentor for 25 freshman student-athletes.</div>
+      <div class="corner-accent"></div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-degree-type">Certifications</div>
+      <div class="edu-degree">Professional Credentials</div>
+      <div class="edu-school">Google · HubSpot · Qualtrics</div>
+      <div style="height:10px"></div>
+      <div class="skill-tags">
+        <span class="skill-tag">Google Data Analytics</span>
+        <span class="skill-tag">Intro to CRM — HubSpot</span>
+        <span class="skill-tag">Introduction to AI</span>
+        <span class="skill-tag">Surveys with Qualtrics</span>
+      </div>
+      <div class="corner-accent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact" class="contact-wrap">
+  <div class="contact-box">
+    <div class="section-label" style="justify-content:center; margin-bottom:14px;">Let's Connect</div>
+    <h2>Ready to Build<br><em>Something Great</em></h2>
+    <p class="contact-sub">Whether you're building a championship roster, implementing advanced analytics, or looking for a football operations leader — I'd love to talk.</p>
+    <div class="contact-links">
+      <a href="/cdn-cgi/l/email-protection#cea6aba0bcb7e0aaafb8a7aabda1a08ebbbaa1a2abaaa1e0abaabb" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span class="__cf_email__" data-cfemail="b2dad7dcc0cb9cd6d3c4dbd6c1dddcf2c7c6ddded7d6dd9cd7d6c7">[email&#160;protected]</span>
+      </a>
+      <a href="tel:+13174162540" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+        (317) 416-2540
+      </a>
+      <a href="https://linkedin.com/in/henrymdavidson" target="_blank" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        linkedin.com/in/henrymdavidson
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 Henry Davidson, MSDA</div>
+  <div>Player Personnel · Data Analytics · University of Toledo</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entr
