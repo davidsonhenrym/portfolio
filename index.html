@@ -462,11 +462,15 @@
 
   /* REVEAL */
   .reveal {
-    opacity: 0;
-    transform: translateY(28px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.65s ease, transform 0.65s ease;
   }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .js-ready .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  .js-ready .reveal.visible { opacity: 1; transform: translateY(0); }
 
   /* ANIMATIONS */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -790,6 +794,9 @@
 </footer>
 
 <script>
+  // Mark document as JS-ready so reveal animation activates
+  document.body.classList.add('js-ready');
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -797,11 +804,17 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
 
   document.querySelectorAll('.reveal').forEach((el, i) => {
     el.style.transitionDelay = `${(i % 4) * 75}ms`;
-    observer.observe(el);
+    // Immediately show anything already in the viewport
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      el.classList.add('visible');
+    } else {
+      observer.observe(el);
+    }
   });
 </script>
 </body>
